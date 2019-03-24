@@ -1,2 +1,2 @@
 all:
-	gcc board.c square.c display.c main.c -Wall -o main
+	gcc game.c player.c board.c square.c display.c main.c -Wall -o main

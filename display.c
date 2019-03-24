@@ -2,9 +2,24 @@
 
 Display* newDisplay() {
 	Display* display = malloc(sizeof(Display));
+	display->_game = newGame();
 	setMenuDisplay(display);
-	printf("%s", display->_displayText);
 	return display;	
+}
+
+void displayGame(Display* display) {
+	printf("displayGame\n");
+	printf("%s", display->_game->_mode);
+	printDisplay(display, display->_game->_mode);
+	char input[10];
+	scanf("%s", input);
+	while (strcmp(input, "quit") != 0) {
+		display->_game->_mode = input;
+		printDisplay(display, display->_game->_mode);
+		scanf("%s", input);
+	}
+	checkForMoves(display->_game->_board);
+	return;
 }
 
 void printDisplay(Display* display, char *input) {
@@ -21,6 +36,21 @@ void printDisplay(Display* display, char *input) {
 		printf("%s", display->_invalidDisplay);
 	}
 	return;
+}
+
+char* _determineMode(char* input) {
+	if(strcmp(input, "menu") == 0) {
+//		setMenuDisplay(display);
+//		printf("%s", display->_displayText);
+	}else if(strcmp(input, "computer") == 0) {
+//		setComputerDisplay(display);
+//		printf("%s", display->_displayText);
+	} else if((strcmp(input, "double") == 0) || (strcmp(input, "easy") == 0) || (strcmp(input, "regular") == 0)) {
+//		setInstructionDisplay(display);
+//		printf("%s", display->_displayText);
+	} else {
+//		printf("%s", display->_invalidDisplay);
+	}
 }
 
 void setMenuDisplay(Display* display) {

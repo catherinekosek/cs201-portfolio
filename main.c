@@ -1,21 +1,22 @@
-#include "board.h"
 #include "display.h"
 
 int main(int argc, char* argv[]) {
-	Board *board = newBoard();
+	Board* board = newBoard(8);
 	printBoard(board);
+
 	int x;
 	int y;
-	char turn = 'b';
 	scanf("%d", &x);
 	while(x != -1) {
 		scanf("%d", &y);
-		printf("loop");
-		placePiece(board, y, x, turn);
-		printBoard(board);
-		if(turn == 'b') { turn = 'w';}
-		else if(turn == 'w') { turn = 'b';}
-		scanf("%d",&x);
-	}
+		if (board->_validMoves->_movesArray[y][x] == '!') {
+			placePiece(board, y, x);
+			printBoard(board);
+			printf("black: %d, white: %d\n", board->_blackPieces, board->_whitePieces);
+			checkForMoves(board);
+		} else printf("invalid move\n");
+		scanf("%d", &x);
+	}	
+	
 	return 0;
 }

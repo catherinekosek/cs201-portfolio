@@ -5,16 +5,26 @@
 #include <stdlib.h>
 #include "square.h"
 
+typedef struct validMoves {
+	int _exists;
+	char _movesArray[10][10];
+} ValidMoves;
+
 typedef struct board {
-	Square* _boardArray[8][8];
+	int _size;
+	char  _boardArray[10][10];
+	ValidMoves* _validMoves;
+	char _turn;
+	int _whitePieces;
+	int _blackPieces;
 } Board;
 
-Board* newBoard();
+Board* newBoard(int);
 void printBoard(Board*);
-void placePiece(Board*, int, int, char);
-int flipPieces(Board*, int, int, int, int, char, int);
-void checkForMoves(Board*, char);
-void findMoves(Board*, int**, int, int, int, int, char, int, int);
+void placePiece(Board*, int, int);
+int flipPieces(Board*, int, int, int, int, int);
+void checkForMoves(Board*);
+void findMoves(Board*, ValidMoves*, int, int, int, int, int);
 
 #endif
 
