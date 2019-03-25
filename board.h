@@ -5,9 +5,16 @@
 #include <stdlib.h>
 #include "square.h"
 
+typedef struct coordinate {
+	int _x;
+	int _y;
+	int _value;
+} Coordinate;
+
 typedef struct validMoves {
 	int _exists;
-	char _movesArray[10][10];
+	int _movesArray[10][10];
+	Coordinate* _nextMove;
 } ValidMoves;
 
 typedef struct board {
@@ -21,10 +28,10 @@ typedef struct board {
 
 Board* newBoard(int);
 void printBoard(Board*);
-void placePiece(Board*, int, int);
+int placePiece(Board*, int, int);
 int flipPieces(Board*, int, int, int, int, int);
 void checkForMoves(Board*);
-void findMoves(Board*, ValidMoves*, int, int, int, int, int);
+void findMoves(Board*, int, int, int, int, int);
 
 #endif
 

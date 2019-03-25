@@ -23,6 +23,8 @@ Board* newBoard(int size) {
 	board->_blackPieces = 2;
 	
 	ValidMoves* validMoves = malloc(sizeof(ValidMoves));
+	Coordinate* nextMove = malloc(sizeof(Coordinate));
+	validMoves->_nextMove = nextMove;
 	board->_validMoves = validMoves;
 	board->_turn = 'b';
 	checkForMoves(board);	
@@ -45,24 +47,28 @@ void printBoard(Board* board) {
 	printf("\n");
 }
 
-void placePiece(Board* board, int x, int y) {
-	flipPieces(board, x+1, y, 1, 0, 0);		// right
-	flipPieces(board, x+1, y+1, 1, 1, 0);		// right up
-	flipPieces(board, x, y+1, 0, 1, 0);		// up
-	flipPieces(board, x-1, y+1, -1, 1, 0);		// left up
-	flipPieces(board, x-1, y, -1, 0, 0);		// left
-	flipPieces(board, x-1, y-1, -1, -1, 0);		// left down
-	flipPieces(board, x, y-1, 0, -1, 0);		// down
-	flipPieces(board, x+1, y-1, 1, -1, 0);		// right down
-	board->_boardArray[x][y] = board->_turn;
-	if (board->_turn == 'b') {
-		board->_blackPieces++;
-		board->_turn = 'w';
-	} else {
-		board->_whitePieces++;
-		board->_turn = 'b';
+int placePiece(Board* board, int x, int y) {
+	if (board->_validMoves->_movesArray[x][y] != '\0') { 
+		flipPieces(board, x+1, y, 1, 0, 0);		// right
+		flipPieces(board, x+1, y+1, 1, 1, 0);		// right up
+		flipPieces(board, x, y+1, 0, 1, 0);		// up
+		flipPieces(board, x-1, y+1, -1, 1, 0);		// left up
+		flipPieces(board, x-1, y, -1, 0, 0);		// left
+		flipPieces(board, x-1, y-1, -1, -1, 0);		// left down
+		flipPieces(board, x, y-1, 0, -1, 0);		// down
+		flipPieces(board, x+1, y-1, 1, -1, 0);		// right down
+		board->_boardArray[x][y] = board->_turn;
+		if (board->_turn == 'b') {
+			board->_blackPieces++;
+			board->_turn = 'w';
+		} else {
+			board->_whitePieces++;
+			board->_turn = 'b';
+		}
+		return 1;
 	}
-	return;
+	printf("%d\n", board->_validMoves->_movesArray[x][y]);
+	return 0;
 }
 
 int flipPieces(Board* board, int x, int y, int xChange, int yChange, int flip) {
@@ -90,21 +96,23 @@ void checkForMoves(Board* board) {
 	validMoves->_exists = 0;
 	for (int k = 1; k <= board->_size; k++) {
 		for (int l = 0; l <= board->_size; l++) {
-			validMoves->_movesArray[k][l] = '\0';
+			validMoves->_movesArray[k][l] = 0;
 		}
 	}
+
+	validMoves->_nextMove->_value = -1;
 
 	for (int i = 1; i <= board->_size; i++) {
 		for (int j = 1; j <= board->_size; j++) {
 			if (board->_boardArray[i][j] == board->_turn) {
-				findMoves(board, validMoves, i+1, j, 1, 0, 0);		// right
-				findMoves(board, validMoves, i+1, j+1, 1, 1, 0);	// right up
-				findMoves(board, validMoves, i, j+1, 0, 1, 0);		// up
-				findMoves(board, validMoves, i-1, j+1, -1, 1, 0);	// left up
-				findMoves(board, validMoves, i-1, j, -1, 0, 0);		// left
-				findMoves(board, validMoves, i-1, j-1, -1, -1, 0);	// left down
-				findMoves(board, validMoves, i, j-1, 0, -1, 0);		// down
-				findMoves(board, validMoves, i+1, j-1, 1, -1, 0);	// right down
+				findMoves(board, i+1, j, 1, 0, 0);		// right
+				findMoves(board, i+1, j+1, 1, 1, 0);		// right up
+				findMoves(board, i, j+1, 0, 1, 0);		// up
+				findMoves(board, i-1, j+1, -1, 1, 0);		// left up
+				findMoves(board, i-1, j, -1, 0, 0);		// left
+				findMoves(board, i-1, j-1, -1, -1, 0);		// left down
+				findMoves(board, i, j-1, 0, -1, 0);		// down
+				findMoves(board, i+1, j-1, 1, -1, 0);		// right down
 			}
 		}	
 	}	
@@ -112,19 +120,25 @@ void checkForMoves(Board* board) {
 	return;
 }
 
-void findMoves(Board* board, ValidMoves* validMoves, int x, int y, int xChange, int yChange, int sandwich) {
+void findMoves(Board* board, int x, int y, int xChange, int yChange, int count) {
 	char piece = board->_boardArray[x][y];
 	char turn = board->_turn;
 	if (piece == '-') {
 		return;
 	}
-	else if ((piece == turn) || ((piece == '*') && (sandwich == 0))) {
+	else if ((piece == turn) || ((piece == '*') && (count == 0))) {
 		return;
-	} else if ((piece == '*') && (sandwich == 1)) {
-		validMoves->_movesArray[x][y] = '!';
-		validMoves->_exists = 1;
+	} else if ((piece == '*') && (count >= 1)) {
+		board->_validMoves->_movesArray[x][y] = count;
+		board->_validMoves->_exists = 1;
+		if (board->_validMoves->_nextMove->_value < count) {
+			board->_validMoves->_nextMove->_x = x;
+			board->_validMoves->_nextMove->_y = y;
+			board->_validMoves->_nextMove->_value = count;
+		}
 		return;
 	} else {
-		findMoves(board, validMoves, x + xChange, y + yChange, xChange, yChange, 1);
+		count++;
+		findMoves(board, x + xChange, y + yChange, xChange, yChange, count);
 	}
 }

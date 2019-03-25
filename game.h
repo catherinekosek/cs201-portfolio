@@ -6,14 +6,17 @@
 #include "player.h"
 #include "board.h"
 
+enum mode{twoPlayer, easy, regular};
+
 typedef struct game {
 	Player* _player1;
 	Player* _player2;
 	Board* _board;
-	char* _mode;
+	enum mode _mode;
 } Game;
 
 Game* newGame();
 void playGame();
+void takeTurn();
 
 #endif

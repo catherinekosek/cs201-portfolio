@@ -7,7 +7,7 @@
 
 #include "game.h"
 
-typedef struct display {
+/*typedef struct display {
 	Game* _game;
 	char *_displayText;
 	char *_invalidDisplay;
@@ -19,5 +19,5 @@ void printDisplay(Display*, char*);
 void setMenuDisplay(Display*);
 void setComputerDisplay(Display*);
 void setInstructionDisplay(Display*);
-
+*/
 #endif 

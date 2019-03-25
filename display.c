@@ -1,5 +1,5 @@
 #include "display.h"
-
+/*
 Display* newDisplay() {
 	Display* display = malloc(sizeof(Display));
 	display->_game = newGame();
@@ -101,4 +101,4 @@ void setInstructionDisplay(Display* display) {
 		Enter \"next\" to start gameplay.\n\n";
 	return;
 }
-
+*/
