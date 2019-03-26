@@ -2,21 +2,27 @@
 #define _game_h
 
 #include <stdio.h>
+#include <string.h>
 
-#include "player.h"
 #include "board.h"
+#include "validMoves.h"
+#include "player.h"
 
 enum mode{twoPlayer, easy, regular};
 
 typedef struct game {
-	Player* _player1;
-	Player* _player2;
-	Board* _board;
-	enum mode _mode;
+	Board* board;
+	ValidMoves* validMoves;
+	enum mode mode;
+	Player* player1;
+	Player* player2;
+	char turn;
 } Game;
 
-Game* newGame();
-void playGame();
-void takeTurn();
+Game* newGame(char* mode);
+int checkForWin(Game* game);
+void playGame(Game* game);
+void takeHumanTurn(Game* game);
+void takeEasyAITurn(Game* game);
 
 #endif

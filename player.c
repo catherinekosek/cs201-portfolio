@@ -1,9 +1,9 @@
 #include "player.h"
 
-Player* newPlayer(char piece) {
+Player* newPlayer(char piece, enum type type) {
 	Player* player = malloc(sizeof(Player));
-	player->_piece = piece;
-	player->_wins = 0;
-	player->_score = 2;
+	player->type = type;
+	player->piece = piece;
+	player->wins = 0;
 	return player;
 }

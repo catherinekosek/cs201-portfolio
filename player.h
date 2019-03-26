@@ -3,12 +3,14 @@
 
 #include <stdlib.h>
 
+enum type{human, easyAI, regularAI};
+
 typedef struct player{
-	char _piece;
-	int _wins;
-	int _score;	
+	enum type type;
+	char piece;
+	int wins;	
 } Player;
 
-Player* newPlayer(char);
+Player* newPlayer(char, enum type);
 
 #endif
