@@ -6,7 +6,7 @@
 
 typedef struct board {
 	int size;
-	char  boardArray[10][10];
+	char* boardArray;
 	int whitePieces;
 	int blackPieces;
 } Board;
