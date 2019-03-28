@@ -4,14 +4,9 @@
 #include <stdlib.h>
 
 #include "board.h"
+#include "coordinate.h"
 
 enum type{human, easyAI, regularAI};
-
-typedef struct coordinate {
-	int x;
-	int y;
-	int value;
-} Coordinate;
 
 typedef struct player{
 	enum type type;

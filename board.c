@@ -57,7 +57,6 @@ int placePiece(Board* board, int x, int y, char turn) {
 	*(board->boardArray + x * board->size + y) = turn;
 	if (turn == 'b') board->blackPieces++;
 	else board->whitePieces++;
-
 	return 0;
 }
 

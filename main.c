@@ -1,7 +1,9 @@
 #include "game.h"
+#include "input.h"
 
 int main(int argc, char* argv[]) {
-	Game* game = newGame("twoPlayer", 8);
-	playGame(game);
+	int size = promptForBoardSize();
+	Game* game = newGame(size);
+	playGame(game);	
 	return 0;
 }

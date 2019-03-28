@@ -3,26 +3,26 @@ CFLAGS = -Wall
 
 all: main
 
-main: main.o board.o player.o game.o
-	$(CC) $(CFLAGS) -o main main.o board.o player.o game.o
+main: main.o board.o player.o game.o coordinate.o input.o
+	$(CC) $(CFLAGS) -o main main.o board.o player.o game.o coordinate.o input.o
 
 main.o: main.c 
 	$(CC) $(CFLAGS) -c main.c 
 
-display.o: display.c display.h
-	$(CC) $(CFLAGS) -c display.c
-
-game.o: game.c game.h board.h player.h
+game.o: game.c game.h board.h player.h input.h
 	$(CC) $(CFLAGS) -c game.c
 
 board.o: board.c board.h
 	$(CC) $(CFLAGS) -c board.c
 
-player.o: player.c player.h board.h
+player.o: player.c player.h board.h coordinate.h
 	$(CC) $(CFLAGS) -c player.c
 
-validMoves.o: validMoves.c validMoves.h board.h
-	$(CC) $(CFLAGS) -c validMoves.c
+coordinate.o: coordinate.c coordinate.h
+	$(CC) $(CFLAGS) -c coordinate.c
+
+input.o: input.c input.h
+	$(CC) $(CFLAGS) -c input.c
 
 clean:
 	$(RM) main *.o
