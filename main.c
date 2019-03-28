@@ -2,8 +2,8 @@
 #include "input.h"
 
 int main(int argc, char* argv[]) {
-	int size = promptForBoardSize();
-	Game* game = newGame(size);
+	startMenu();
+	Game* game = newGame();
 	playGame(game);	
 	return 0;
 }

@@ -1,16 +1,27 @@
 #include "player.h"
 
-Player* newPlayer(char piece, enum type type, int size) {
+Player* newPlayer(char piece, enum type type, int size, int wins) {
 	Player* player = malloc(sizeof(Player));
 	player->validMoves = malloc(sizeof(int) * size * size);
 	player->type = type;
 	player->piece = piece;
-	player->wins = 0;
+	player->wins = wins;
 	player->nextMove = newCoordinate(-1, -1);	
 	if (type == regularAI) {
 		player->moveWeights = malloc(sizeof(int) * size * size);
 		buildRegularAITable(player, size);
 	}
+	return player;
+}
+
+Player* rematchPlayer(Player* player, int size) {
+	free(player->validMoves);
+	player->validMoves = malloc(sizeof(int) * size * size);
+	if (player->piece == 'b') player->piece = 'w';
+	else player->piece = 'b';
+	free(player->nextMove);
+	player->nextMove = newCoordinate(-1, -1);
+	printf("\nplayer->moveExists: %d\n", player->moveExists);
 	return player;
 }
 
@@ -22,7 +33,7 @@ void checkForMoves(Player* player, Board* board) {
 		}
 	}
 	player->nextMove->value = 0;
-	
+
 	for (int i = 1; i < board->size; i++) {
 		for (int j = 1; j < board->size; j++) {
 			if (*(board->boardArray + i * board->size + j) == player->piece) {

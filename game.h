@@ -8,8 +8,6 @@
 #include "player.h"
 #include "input.h"
 
-enum mode{twoPlayer, easy, regular, invalid};
-
 typedef struct game {
 	Board* board;
 	Player* player1;
@@ -17,7 +15,8 @@ typedef struct game {
 	Player* turn;
 } Game;
 
-Game* newGame(int size);
+Game* newGame();
+void rematch(Game* game);
 int checkForWin(Game* game);
 void playGame(Game* game);
 void takeHumanTurn(Game* game);

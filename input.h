@@ -8,12 +8,16 @@
 #include "coordinate.h"
 #include "game.h"
 
+enum programState{menu, boardSize, gameType, enterCoordinate};
+
 typedef struct input{
 	char* stringDisplay;
 } Input;
 
+void startMenu();
+int checkForPersistentOptions(char*);
 Coordinate* promptForCoordinate(int);
-enum mode promptForGameType();
+enum type promptForGameType();
 int promptForBoardSize();
 
 #endif

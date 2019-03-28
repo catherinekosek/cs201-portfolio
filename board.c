@@ -43,6 +43,7 @@ void printBoard(Board* board) {
 		}
 	}
 	printf("\n\n\tBlack Pieces: %d\t WhitePieces: %d\n", board->blackPieces, board->whitePieces);
+	return;
 }
 
 int placePiece(Board* board, int x, int y, char turn) {

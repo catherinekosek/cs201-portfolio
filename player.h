@@ -6,7 +6,7 @@
 #include "board.h"
 #include "coordinate.h"
 
-enum type{human, easyAI, regularAI};
+enum type{human, easyAI, regularAI, invalid};
 
 typedef struct player{
 	enum type type;
@@ -18,7 +18,8 @@ typedef struct player{
 	int* moveWeights;
 } Player;
 
-Player* newPlayer(char, enum type, int);
+Player* newPlayer(char, enum type, int, int);
+Player* rematchPlayer(Player*, int);
 void checkForMoves(Player*, Board*);
 void findMoves(Player*, Board*, int, int, int, int, int);
 void buildRegularAITable(Player*, int);
