@@ -13,6 +13,7 @@ typedef struct player{
 	char piece;
 	int wins;
 	int* validMoves;
+	int* visited;
 	int moveExists;
 	Coordinate* nextMove;
 	int* moveWeights;
@@ -20,6 +21,7 @@ typedef struct player{
 
 Player* newPlayer(char, enum type, int, int);
 Player* rematchPlayer(Player*, int);
+void DFS(Player*, Board*, int, int);
 void checkForMoves(Player*, Board*);
 void findMoves(Player*, Board*, int, int, int, int, int);
 void buildRegularAITable(Player*, int);

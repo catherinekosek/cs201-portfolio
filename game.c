@@ -4,7 +4,7 @@ Game* newGame() {
 	Game* game = malloc(sizeof(Game));
 	int size = promptForBoardSize();
 	game->board = newBoard(size);	
-	game->player1 = newPlayer('b', human, size+2, 0);
+	game->player1 = newPlayer('b', regularAI, size+2, 0);
 	enum type type = promptForGameType();
 	game->player2 = newPlayer('w', type, size+2, 0);
 	game->turn = game->player1;
@@ -12,6 +12,7 @@ Game* newGame() {
 }
 
 void playGame(Game* game) {
+	printf("\nstarting game\n");
 	int win = checkForWin(game);
 	while(win == 0) {
 		if (game->turn->type == human) takeHumanTurn(game);

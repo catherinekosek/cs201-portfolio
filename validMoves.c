@@ -14,6 +14,27 @@ int validateMove(ValidMoves* validMoves, int x, int y) {
 	return 0;
 }
 
+void DFS(int* visited, int* validMoves, int x, int y, int size, char turn) {
+	*(visited + x * size + y) = 1;
+	
+	if (*(validMoves->movesArray
+	if (*(validMoves + x * size + y) == piece) {
+		findMoves(validMoves, i+1, j, 1, 0, 0, turn);		// right
+		findMoves(validMoves, i+1, j+1, 1, 1, 0, turn);		// right up
+		findMoves(validMoves, i, j+1, 0, 1, 0, turn);		// up
+		findMoves(validMoves, i-1, j+1, -1, 1, 0, turn);	// left up
+		findMoves(validMoves, i-1, j, -1, 0, 0, turn);		// left
+		findMoves(validMoves, i-1, j-1, -1, -1, 0, turn);	// left down
+		findMoves(validMoves, i, j-1, 0, -1, 0, turn);		// down
+		findMoves(validMoves, i+1, j-1, 1, -1, 0, turn);	// right down
+	} else if (*(validMoves + x * size + y) == '*') {
+		return;
+	} else {
+		// all directions
+	}
+	
+}
+
 void checkForMoves(ValidMoves* validMoves, char turn) {
 	Board* board = validMoves->board;
 

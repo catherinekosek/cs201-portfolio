@@ -3,6 +3,7 @@
 Player* newPlayer(char piece, enum type type, int size, int wins) {
 	Player* player = malloc(sizeof(Player));
 	player->validMoves = malloc(sizeof(int) * size * size);
+	player->visited = malloc(sizeof(int) * size * size);
 	player->type = type;
 	player->piece = piece;
 	player->wins = wins;
@@ -26,15 +27,20 @@ Player* rematchPlayer(Player* player, int size) {
 }
 
 void checkForMoves(Player* player, Board* board) {	
+	printf("\nchecking for moves\n");
 	player->moveExists = 0;
-	for (int k = 1; k < board->size-1; k++) {
+/*	for (int k = 1; k < board->size-1; k++) {
 		for (int l = 0; l < board->size-1; l++) {
 			*(player->validMoves + k * board->size + l) = 0;
 		}
+	} */
+	for (int k = 0; k < board->size * board->size; k++) {
+		*(player->validMoves + k) = 0;
+		*(player->visited + k) = 0;
 	}
 	player->nextMove->value = 0;
 
-	for (int i = 1; i < board->size; i++) {
+/*	for (int i = 1; i < board->size; i++) {
 		for (int j = 1; j < board->size; j++) {
 			if (*(board->boardArray + i * board->size + j) == player->piece) {
 				findMoves(player, board, i+1, j, 1, 0, 0);		// right
@@ -47,7 +53,35 @@ void checkForMoves(Player* player, Board* board) {
 				findMoves(player, board, i+1, j-1, 1, -1, 0);		// right down
 			}
 		}	
+	} */
+	printf("\nstarting DFS\n");
+	DFS(player, board, (board->size-2)/2, (board->size-2)/2);
+	return;
+}
+
+void DFS(Player* player, Board* board, int x, int y) {
+	*(player->visited + x * board->size + y) = 1;
+	if (*(board->boardArray + x * board->size + y) == '*') return;
+	else if (*(board->boardArray + x * board->size + y) == '-') return;
+	else if (*(board->boardArray + x * board->size + y) == player->piece) {
+		findMoves(player, board, x+1, y, 1, 0, 0);		// right
+		findMoves(player, board, x+1, y+1, 1, 1, 0);		// right up
+		findMoves(player, board, x, y+1, 0, 1, 0);		// up
+		findMoves(player, board, x-1, y+1, -1, 1, 0);		// left up
+		findMoves(player, board, x-1, y, -1, 0, 0);		// left
+		findMoves(player, board, x-1, y-1, -1, -1, 0);		// left down
+		findMoves(player, board, x, y-1, 0, -1, 0);		// down
+		findMoves(player, board, x+1, y-1, 1, -1, 0);		// right down
 	}
+
+	if (*(player->visited + (x+1) * board->size + y) == 0) DFS(player, board, x+1, y);	// right
+	if (*(player->visited + (x+1) * board->size + (y+1)) == 0) DFS(player, board, x+1, y+1);// right up
+	if (*(player->visited + x * board->size + (y+1)) == 0) DFS(player, board, x, y+1);	// up
+	if (*(player->visited + (x-1) * board->size + (y+1)) == 0) DFS(player, board, x-1, y+1);// left up
+	if (*(player->visited + (x-1) * board->size + y) == 0) DFS(player, board, x-1, y);	// left
+	if (*(player->visited + (x-1) * board->size + (y-1)) == 0) DFS(player, board, x-1, y-1);// left down
+	if (*(player->visited + x * board->size + (y-1)) == 0) DFS(player, board, x, y-1);	// down
+	if (*(player->visited + (x+1) * board->size + (y-1)) == 0) DFS(player, board, x+1, y-1);// right down
 	return;
 }
 
