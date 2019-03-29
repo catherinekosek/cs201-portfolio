@@ -167,7 +167,9 @@ Coordinate* promptForCoordinate(int size) {
 		help = checkForPersistentOptions(input);
 		y = atoi(input);
 	}
-	Coordinate* coordinate = newCoordinate(x, y);
+	Coordinate* coordinate = malloc(sizeof(Coordinate));
+	coordinate->r = x;
+	coordinate->c = y;
 	return coordinate;
 }
 

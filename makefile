@@ -3,8 +3,8 @@ CFLAGS = -Wall
 
 all: main
 
-main: main.o board.o player.o game.o coordinate.o input.o
-	$(CC) $(CFLAGS) -o main main.o board.o player.o game.o coordinate.o input.o
+main: main.o board.o player.o game.o input.o
+	$(CC) $(CFLAGS) -o main main.o board.o player.o game.o input.o
 
 main.o: main.c 
 	$(CC) $(CFLAGS) -c main.c 
@@ -15,11 +15,8 @@ game.o: game.c game.h board.h player.h input.h
 board.o: board.c board.h
 	$(CC) $(CFLAGS) -c board.c
 
-player.o: player.c player.h board.h coordinate.h
+player.o: player.c player.h board.h
 	$(CC) $(CFLAGS) -c player.c
-
-coordinate.o: coordinate.c coordinate.h
-	$(CC) $(CFLAGS) -c coordinate.c
 
 input.o: input.c input.h
 	$(CC) $(CFLAGS) -c input.c

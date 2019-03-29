@@ -4,7 +4,7 @@ Game* newGame() {
 	Game* game = malloc(sizeof(Game));
 	int size = promptForBoardSize();
 	game->board = newBoard(size);	
-	game->player1 = newPlayer('b', regularAI, size+2, 0);
+	game->player1 = newPlayer('b', human, size+2, 0);
 	enum type type = promptForGameType();
 	game->player2 = newPlayer('w', type, size+2, 0);
 	game->turn = game->player1;
@@ -12,7 +12,6 @@ Game* newGame() {
 }
 
 void playGame(Game* game) {
-	printf("\nstarting game\n");
 	int win = checkForWin(game);
 	while(win == 0) {
 		if (game->turn->type == human) takeHumanTurn(game);
@@ -29,7 +28,9 @@ void playGame(Game* game) {
 		printf("\n\nPlayer 2 won!\n");
 		game->player2->wins++;
 	}
+	printf("\nCurrent Score:\nPlayer 1: %d\tPlayer 2: %d\n\n", game->player1->wins, game->player2->wins);
 	rematch(game);
+	printf("\n\nPlayer 1 and Player 2 switch!\n");
 	return;
 }
 
@@ -66,7 +67,7 @@ int checkForWin(Game* game) {
 	checkForMoves(game->turn, game->board);
 	if (game->turn->moveExists == 1) {
 		return 0;
-	}else {
+	} else {
 		if (game->turn == game->player1) game->turn = game->player2;
 		else game->turn = game-> player1;
 		checkForMoves(game->turn, game->board);
@@ -82,11 +83,11 @@ void takeHumanTurn(Game* game) {
 	printf("\n\n%c's turn.\n", game->turn->piece);
 	printBoard(game->board);
 	Coordinate* coordinate = promptForCoordinate(game->board->size);
-	if (*(game->turn->validMoves + coordinate->x * game->board->size + coordinate->y) == 0) {
+	if (*(game->turn->validMoves + coordinate->r * game->board->size + coordinate->c) == 0) {
 		printf("Invalid move. Please try again.\n");
 		takeHumanTurn(game);
 	} else {
-		placePiece(game->board, coordinate->x, coordinate->y, game->turn->piece);
+		placePiece(game->board, coordinate->r, coordinate->c, game->turn->piece);
 		if (game->turn == game->player1) game->turn = game->player2;
 		else game->turn = game->player1;
 	}
@@ -96,8 +97,8 @@ void takeHumanTurn(Game* game) {
 void takeAITurn(Game* game) {
 	printf("\n\n%c's turn.\n", game->turn->piece);
 	printBoard(game->board);
-	printf("Placing piece in row %d, column %d.\n", game->turn->nextMove->x, game->turn->nextMove->y);
-	placePiece(game->board, game->turn->nextMove->x, game->turn->nextMove->y, game->turn->piece);
+	printf("Placing piece in row %d, column %d.\n", game->turn->nextMove->r, game->turn->nextMove->c);
+	placePiece(game->board, game->turn->nextMove->r, game->turn->nextMove->c, game->turn->piece);
 	if (game->turn == game->player1) game->turn = game->player2;
 	else game->turn = game->player1;
 	return;

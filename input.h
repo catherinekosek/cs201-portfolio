@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "coordinate.h"
 #include "game.h"
 
 enum programState{menu, boardSize, gameType, enterCoordinate};
