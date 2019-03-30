@@ -12,8 +12,9 @@ typedef struct board {
 } Board;
 
 Board* newBoard(int);
+void destructBoard(Board*);
 void printBoard(Board*);
-int placePiece(Board*, int, int, char);
+void placePiece(Board*, int, int, char);
 int flipPieces(Board*, int, int, int, int, int, char);
 
 #endif

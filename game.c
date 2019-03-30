@@ -1,24 +1,40 @@
 #include "game.h"
 
+/* Constructor for a new Game
+	Prompt user for size of Game board and for Game type
+	Allocate space for Game
+	Create Board and Players for Game
+	Set the turn to Player 1 
+	Return a pointer to the Game 
+*/
 Game* newGame() {
-	Game* game = malloc(sizeof(Game));
 	int size = promptForBoardSize();
-	game->board = newBoard(size);	
-	game->player1 = newPlayer('b', human, size+2, 0);
 	enum type type = promptForGameType();
+
+	Game* game = malloc(sizeof(Game));
+	game->board = newBoard(size);	
+	game->player1 = newPlayer('b', easyAI, size+2, 0);
 	game->player2 = newPlayer('w', type, size+2, 0);
 	game->turn = game->player1;
+	
 	return game;
 }
 
+/* Controls logic of gameplay for a Game
+	While there is no win, a player takes a turn
+		Human turn prompts for input, AI turn does not
+	Once the Game is won, display winner and score
+	Begin rematch of Game
+*/ 
 void playGame(Game* game) {
 	int win = checkForWin(game);
+	
 	while(win == 0) {
 		if (game->turn->type == human) takeHumanTurn(game);
 		else takeAITurn(game);
 		win = checkForWin(game);
 	}
-	printf("\n");
+
 	printBoard(game->board);
 	if (game->board->blackPieces > game->board->whitePieces) { 
 		printf("\n\nPlayer 1 won!\n");
@@ -72,7 +88,7 @@ int checkForWin(Game* game) {
 		else game->turn = game-> player1;
 		checkForMoves(game->turn, game->board);
 		if (game->turn->moveExists == 1) {
-			printf("No moves.\nSkipping to %c's turn.", game->turn->piece);
+			printf("No moves.\nSkipping to %c's turn.i\n", game->turn->piece);
 			return 0;
 		}
 	}
