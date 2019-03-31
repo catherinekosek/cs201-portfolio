@@ -1,8 +1,9 @@
 #include "board.h"
 
-/* Constructor for a new Board with dimensions size x size
-	Allocate size for the Board and the boardArray
+/* Constructor for a new Board with dimensions size x size:
+	Allocate size for the Board
 	Increment the size by 2 to add the buffer pieces around the edge of the board
+	Allocate size for the Board arrays
 	Set the buffer pieces, represented by '-'
 	Set all other board locations to empty, represented by '*'
 	Set the starting setup of the board, with pieces on the center four locations
@@ -10,10 +11,13 @@
 */
 Board* newBoard(int size) {
 	Board* board = malloc(sizeof(Board));
+
 	size += 2;
 	board->size = size;
-	board->boardArray = (char *)malloc(sizeof(char) * (size) * (size));  
-	
+	board->boardArray = (char *)malloc(sizeof(char) * size * size);  
+	board->validMoves = (int *)malloc(sizeof(int) * size * size);	
+	board->visited = (int *)malloc(sizeof(int) * size * size);
+
 	for (int k = 0; k < size; k++) {
 		*(board->boardArray + 0 * size + k) = '-';
 		*(board->boardArray + k * size + 0) = '-';
@@ -39,17 +43,19 @@ Board* newBoard(int size) {
 	return board;
 }
 
-/* Destructor for an existing Board
+/* Destructor for an existing Board:
 	Frees space allocated for boardArray
 	Frees space allocated for board
 */
 void destructBoard(Board* board) {
 	free(board->boardArray);
+	free(board->validMoves);
+	free(board->visited);
 	free(board);
 	return;
 }
 
-/* Prints the Board boardArray to the console 
+/* Prints the Board boardArray to the console:
 	Print reference numbers along the top of the board
 	Print reference numbers along the left side of the board
 	Print the piece at each location on the board 
@@ -76,7 +82,7 @@ void printBoard(Board* board) {
 	return;
 }
 
-/* Controls the logic of placing a piece on the Board
+/* Controls the logic of placing a piece on the Board:
 	Sets location r, c on Board equal to the piece turn
 	flipsPieces in every direction from location r, c
 	Increments the number of pieces of color of turn by 1
@@ -98,7 +104,7 @@ void placePiece(Board* board, int r, int c, char turn) {
 	return;
 }
 
-/* Determines if pieces need to be flipped and performs appropriate flips
+/* Determines if pieces need to be flipped and performs appropriate flips:
    Pieces need to be flipped if there is:
 	A line vertically, horizontally, or diagonally from the newly placed piece to a piece of the same color
 	No empty spaces or other pieces of the same color in this line
@@ -150,16 +156,16 @@ int flipPieces(Board* board, int r, int c, int rChange, int cChange, int flip, c
 	Resets anything set by a previous checkForMoves
 	Begins a depth-first search of the board
 */
-void checkForMoves(Player* player, Board* board) {	
+void checkForMoves(Board* board, Player* player) {	
 	player->moveExists = 0;
 	if (player->type != human) player->nextMove->value = 0;
 	for (int i = 0; i < board->size * board->size; i++) {
-		*(player->validMoves + i) = 0;
-		*(player->visited + i) = 0;
+		*(board->validMoves + i) = 0;
+		*(board->visited + i) = 0;
 	}
 
 	// Board location (board->size-2)/2, (board->size-2)/2 will always be occupied
-	DFS(player, board, (board->size-2)/2, (board->size-2)/2);
+	DFS(board, player, (board->size-2)/2, (board->size-2)/2);
 	return;
 }
 
@@ -179,30 +185,30 @@ void checkForMoves(Player* player, Board* board) {
 		Each location has eight adjacencies 
 		Adjacencies are calculated, not stored in a list
 */
-void DFS(Player* player, Board* board, int r, int c) {
-	*(player->visited + r * board->size + c) = 1;
+void DFS(Board* board, Player* player, int r, int c) {
+	*(board->visited + r * board->size + c) = 1;
 	
 	if (*(board->boardArray + r * board->size + c) == '*') return;
 	else if (*(board->boardArray + r * board->size + c) == '-') return;
 	else if (*(board->boardArray + r * board->size + c) == player->piece) {
-		findMoves(player, board, r+1, c, 1, 0, 0);		// right
-		findMoves(player, board, r+1, c+1, 1, 1, 0);		// right up
-		findMoves(player, board, r, c+1, 0, 1, 0);		// up
-		findMoves(player, board, r-1, c+1, -1, 1, 0);		// left up
-		findMoves(player, board, r-1, c, -1, 0, 0);		// left
-		findMoves(player, board, r-1, c-1, -1, -1, 0);		// left down
-		findMoves(player, board, r, c-1, 0, -1, 0);		// down
-		findMoves(player, board, r+1, c-1, 1, -1, 0);		// right down
+		findMoves(board, player, r+1, c, 1, 0, 0);		// right
+		findMoves(board, player, r+1, c+1, 1, 1, 0);		// right up
+		findMoves(board, player, r, c+1, 0, 1, 0);		// up
+		findMoves(board, player, r-1, c+1, -1, 1, 0);		// left up
+		findMoves(board, player, r-1, c, -1, 0, 0);		// left
+		findMoves(board, player, r-1, c-1, -1, -1, 0);		// left down
+		findMoves(board, player, r, c-1, 0, -1, 0);		// down
+		findMoves(board, player, r+1, c-1, 1, -1, 0);		// right down
 	}
 
-	if (*(player->visited + (r+1) * board->size + c) == 0) DFS(player, board, r+1, c);	// right
-	if (*(player->visited + (r+1) * board->size + (c+1)) == 0) DFS(player, board, r+1, c+1);// right up
-	if (*(player->visited + r * board->size + (c+1)) == 0) DFS(player, board, r, c+1);	// up
-	if (*(player->visited + (r-1) * board->size + (c+1)) == 0) DFS(player, board, r-1, c+1);// left up
-	if (*(player->visited + (r-1) * board->size + c) == 0) DFS(player, board, r-1, c);	// left
-	if (*(player->visited + (r-1) * board->size + (c-1)) == 0) DFS(player, board, r-1, c-1);// left down
-	if (*(player->visited + r * board->size + (c-1)) == 0) DFS(player, board, r, c-1);	// down
-	if (*(player->visited + (r+1) * board->size + (c-1)) == 0) DFS(player, board, r+1, c-1);// right down
+	if (*(board->visited + (r+1) * board->size + c) == 0) DFS(board, player, r+1, c);	// right
+	if (*(board->visited + (r+1) * board->size + (c+1)) == 0) DFS(board, player, r+1, c+1);	// right up
+	if (*(board->visited + r * board->size + (c+1)) == 0) DFS(board, player, r, c+1);	// up
+	if (*(board->visited + (r-1) * board->size + (c+1)) == 0) DFS(board, player, r-1, c+1);	// left up
+	if (*(board->visited + (r-1) * board->size + c) == 0) DFS(board, player, r-1, c);	// left
+	if (*(board->visited + (r-1) * board->size + (c-1)) == 0) DFS(board, player, r-1, c-1);	// left down
+	if (*(board->visited + r * board->size + (c-1)) == 0) DFS(board, player, r, c-1);	// down
+	if (*(board->visited + (r+1) * board->size + (c-1)) == 0) DFS(board, player, r+1, c-1);	// right down
 	
 	return;
 }
@@ -240,11 +246,11 @@ void DFS(Player* player, Board* board, int r, int c) {
 			Store move in array validMoves
 			If Player is an AI, store move in nextMove if move is more advantageous
 		else
-			piece is of the opposite color
-			increment count
-			continue search in same direction
+			Piece is of the opposite color
+			Increment count
+			Continue search in same direction
 */
-void findMoves(Player* player, Board* board, int r, int c, int rChange, int cChange, int count) {
+void findMoves(Board* board, Player* player, int r, int c, int rChange, int cChange, int count) {
 	char piece = *(board->boardArray + r * board->size + c);
 	char turn = player->piece;
 
@@ -252,19 +258,19 @@ void findMoves(Player* player, Board* board, int r, int c, int rChange, int cCha
 	else if ((piece == '*') && (count >= 1)) {
 		player->moveExists = 1;
 		if (player->type == regularAI) {
-			*(player->validMoves + r * board->size + c) = *(player->moveWeights + r * board->size + c);
+			*(board->validMoves + r * board->size + c) = *(player->moveWeights + r * board->size + c);
 		}
-		else *(player->validMoves + r * board->size + c) += count;
+		else *(board->validMoves + r * board->size + c) += count;
 
-		if (player->type != human && *(player->validMoves + r * board->size + c) > player->nextMove->value) {
+		if (player->type != human && *(board->validMoves + r * board->size + c) > player->nextMove->value) {
 			player->nextMove->r = r;
 			player->nextMove->c = c;
-			player->nextMove->value = *(player->validMoves + r * board->size + c);
+			player->nextMove->value = *(board->validMoves + r * board->size + c);
 		}
 		return;
 	} else {
 		count++;
-		findMoves(player, board, r + rChange, c + cChange, rChange, cChange, count);
+		findMoves(board, player, r + rChange, c + cChange, rChange, cChange, count);
 	}
 
 	return;

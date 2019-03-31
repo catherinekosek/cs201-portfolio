@@ -3,7 +3,9 @@
 
 int main(int argc, char* argv[]) {
 	startMenu();
-	Game* game = newGame();
-	playGame(game);	
+	while (1) {
+		Game* game = newGame();
+		playGame(game);	
+	}
 	return 0;
 }

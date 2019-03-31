@@ -3,22 +3,14 @@
 
 #include <stdlib.h>
 
-#include "board.h"
-
-enum type{human, easyAI, regularAI, invalid};
-
-typedef struct coordinate {
-	int r;
-	int c;
-	int value;
-} Coordinate;
+#include "coordinate.h"
+#include "input.h"
 
 typedef struct player{
-	int* validMoves;
-	int* visited;
 	Coordinate* nextMove;
 	int* moveWeights;
-
+	char* name;
+	
 	char piece;
 	enum type type;
 	int wins;
@@ -28,9 +20,6 @@ typedef struct player{
 
 Player* newPlayer(char, enum type, int, int);
 void destructPlayer(Player* player);
-void checkForMoves(Player*, Board*);
-void DFS(Player*, Board*, int, int);
-void findMoves(Player*, Board*, int, int, int, int, int);
 void buildRegularAITable(Player*, int);
 
 #endif

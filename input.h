@@ -3,20 +3,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
+#include <string.h>
 
-#include "game.h"
+#include "coordinate.h"
 
-enum programState{menu, boardSize, gameType, enterCoordinate};
+enum programState{character, boardSize, name, coordinate};
 
-typedef struct input{
-	char* stringDisplay;
-} Input;
+enum type{human, easyAI, regularAI};
 
 void startMenu();
-int checkForPersistentOptions(char*);
-Coordinate* promptForCoordinate(int);
+int checkForPersistentOptions(char*, enum programState);
 enum type promptForGameType();
 int promptForBoardSize();
+char* promptForName();
+Coordinate* promptForCoordinate(int);
+int promptForRematch();
 
 #endif

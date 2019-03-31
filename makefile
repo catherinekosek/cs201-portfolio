@@ -1,13 +1,13 @@
 CC = gcc
 CFLAGS = -Wall
 
-all: main
+all: othello
 
-main: main.o board.o player.o game.o input.o
-	$(CC) $(CFLAGS) -o main main.o board.o player.o game.o input.o
+othello: othello.o board.o player.o game.o input.o coordinate.o
+	$(CC) $(CFLAGS) -o othello othello.o board.o player.o game.o input.o coordinate.o
 
-main.o: main.c 
-	$(CC) $(CFLAGS) -c main.c 
+othello.o: othello.c 
+	$(CC) $(CFLAGS) -c othello.c 
 
 game.o: game.c game.h board.h player.h input.h
 	$(CC) $(CFLAGS) -c game.c
@@ -15,11 +15,14 @@ game.o: game.c game.h board.h player.h input.h
 board.o: board.c board.h
 	$(CC) $(CFLAGS) -c board.c
 
-player.o: player.c player.h board.h
+player.o: player.c player.h
 	$(CC) $(CFLAGS) -c player.c
 
 input.o: input.c input.h
 	$(CC) $(CFLAGS) -c input.c
+
+coordinate.o: coordinate.c coordinate.h
+	$(CC) $(CFLAGS) -c coordinate.c
 
 clean:
 	$(RM) main *.o
