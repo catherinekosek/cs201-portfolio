@@ -6,6 +6,7 @@
 #include "board.h"
 #include "player.h"
 #include "input.h"
+#include "coordinate.h"
 
 typedef struct game {
 	Board* board;

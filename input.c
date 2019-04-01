@@ -3,18 +3,22 @@
 const int inputSize = 20;
 
 const char menuString[] = "\nWELCOME TO OTHELLO\n\n\
+Enter your selection exactly as the options are shown. Check spelling, and make sure any input is entered only\n\
+as lowercase characters, followed by a single press of the \"Enter\" key. Do not add any extra characters or spaces.\n\
+Input entered must be 20 characters or less. Any input longer than 20 characters will print multiple error messages.\n\n\
 At any time prompted for user input:\n\
-Enter \"help\" for detailed gameplay and input instructions. This will not exit the game.\n\
+Enter \"instructions\" for gameplay instructions.\n\
+Enter \"help\" for detailed tips on entering input.\n\
 Enter \"quit\" to exit the program.\n\n\
 Enter \"start\" to start the game.\n";
 
-const char gameplayInstructions[] = "\nGAMEPLAY INSTRUCTIONS\n\n\
+const char gameplayInstructions[] = "\n\nGAMEPLAY INSTRUCTIONS\n\n\
 A standard Othello board is 8x8 squares.\n\
 Pieces can be either black, represented as a \"b\", or white, represented by a \"w\".\n\
 An empty square is represented by an asterik, \"*\".\n\
 When the gameboard is printed, the numbers down the left side represent the row numbers.\n\
 Numbers across the top of the board represent the column numbers.\n\n\
-A piece of one color must be placed in an empty such that there is a horizontal, vertical,\n\
+A piece of one color must be placed in an empty location such that there is a horizontal, vertical,\n\
 or diagonal line between the new piece and an existing piece of the same color.\n\n\
 In between the piece placed and the existing piece of the same color, there must be one or\n\
 more contiguous pieces of the opposite color. There cannot be any empty spaces between the\n\
@@ -57,7 +61,8 @@ Enter your selection.\n";
 
 const char characterHelp[] = "\n\nINPUT HELP\n\
 Enter your selection exactly as the options are shown. Check spelling, and make sure any input is entered only\n\
-as lowercase characters, followed by a single press of the \"Enter\" key. Do not add any extra characters or spaces.\n";
+as lowercase characters, followed by a single press of the \"Enter\" key. Do not add any extra characters or spaces.\n\
+Input entered must be 20 characters or less. Any input longer than 20 characters will print multiple error messages.\n";
 
 const char boardSizeHelp[] = "\n\nBOARD SIZE INPUT HELP\n\
 Enter the board size as a numeric digit, followed by a single press of the \"Enter\" key.\n\
@@ -73,6 +78,8 @@ In a two player game, both users enter their names. When playing against the com
 Names can be any combination of letters, numbers, and symbols, as long as they are 20 characters or less.\n";
 
 const char coordinateHelp[] = "\n\nENTER COORDINATE HELP\n\
+Pieces can be either black, represented as a \"b\", or white, represented by a \"w\".\n\
+An empty square is represented by an asterik, \"*\".\n\
 To place a piece on an empty square, you will first be prompted to enter the row number of the\n\
 empty square you wish to place the piece on. Then you will be prompted to enter the column number.\n\n\
 The row number refers to the number to the left of the board that corresponds to the row of the\n\
@@ -158,7 +165,7 @@ int promptForBoardSize() {
 	fgets(input, inputSize, stdin);
 	int help = checkForPersistentOptions(input, boardSize);
 	int size = atoi(input);
-	while (size == 0 || size < 8 || size % 4 != 0) {
+	while (size < 8 || (size % 4) != 0) {
 		if (help == 0) printf("\nThat input is invalid.");
 		printf("%s", boardSizePrompt);
 		fgets(input, inputSize, stdin);
@@ -171,6 +178,7 @@ int promptForBoardSize() {
 /* Prompts user to enter their name:
 	Any characters allowed
 	Must be inputSize characters or less
+	Remove the \n character from the input
    Return the name entered
 */
 char* promptForName() {
@@ -183,6 +191,7 @@ char* promptForName() {
 		fgets(input, inputSize, stdin);
 		help = checkForPersistentOptions(input, name);
 	}
+	for (int i = 0; i < inputSize; i++) if (input[i] == '\n') input[i] = '\0';
 	return input;
 }
 
@@ -240,7 +249,5 @@ int promptForRematch() {
 		if (strncmp(input, "rematch\n", inputSize) == 0) return 1;
 		else if (strncmp(input, "menu\n", inputSize) == 0) return 0;
 		else if (help == 0) printf("\nThat input is invalid.");
-		fgets(input, inputSize, stdin);
-		checkForPersistentOptions(input, character);
 	}	
 }

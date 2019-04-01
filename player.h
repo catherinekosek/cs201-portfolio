@@ -18,7 +18,7 @@ typedef struct player{
 
 } Player;
 
-Player* newPlayer(char, enum type, int, int);
+Player* newPlayer(char, enum type, int);
 void destructPlayer(Player* player);
 void buildRegularAITable(Player*, int);
 

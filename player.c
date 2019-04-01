@@ -6,7 +6,7 @@
 	Assigns attributes to Player
 	Returns pointer to complete Player 
 */
-Player* newPlayer(char piece, enum type type, int size, int wins) {
+Player* newPlayer(char piece, enum type type, int size) {
 	Player* player = (Player *)malloc(sizeof(Player));
 	if (type != human) player->nextMove = newCoordinate();
 	if (type == regularAI) {
@@ -19,7 +19,7 @@ Player* newPlayer(char piece, enum type type, int size, int wins) {
 		
 	player->piece = piece;
 	player->type = type;
-	player->wins = wins;	
+	player->wins = 0;	
 	
 	return player;
 }
@@ -126,6 +126,6 @@ void buildRegularAITable(Player* player, int size) {
 	*(player->moveWeights + 1 * size + edge) = 8;
 	*(player->moveWeights + edge * size + 1) = 8;
 	*(player->moveWeights + edge * size + edge) = 8;
-	
+		
 	return;
 }

@@ -3,27 +3,27 @@ CFLAGS = -Wall
 
 all: othello
 
-othello: othello.o board.o player.o game.o input.o coordinate.o
-	$(CC) $(CFLAGS) -o othello othello.o board.o player.o game.o input.o coordinate.o
+othello: othello.o input.o game.o board.o player.o coordinate.o
+	$(CC) $(CFLAGS) -o othello othello.o input.o game.o board.o player.o coordinate.o
 
-othello.o: othello.c 
+othello.o: othello.c input.h game.h
 	$(CC) $(CFLAGS) -c othello.c 
 
-game.o: game.c game.h board.h player.h input.h
+input.o: input.c input.h coordinate.h
+	$(CC) $(CFLAGS) -c input.c
+
+game.o: game.c game.h input.h board.h player.h coordinate.h
 	$(CC) $(CFLAGS) -c game.c
 
-board.o: board.c board.h
+board.o: board.c board.h player.h 
 	$(CC) $(CFLAGS) -c board.c
 
-player.o: player.c player.h
+player.o: player.c player.h coordinate.h
 	$(CC) $(CFLAGS) -c player.c
-
-input.o: input.c input.h
-	$(CC) $(CFLAGS) -c input.c
 
 coordinate.o: coordinate.c coordinate.h
 	$(CC) $(CFLAGS) -c coordinate.c
 
 clean:
-	$(RM) main *.o
+	$(RM) othello *.o
 

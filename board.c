@@ -44,7 +44,7 @@ Board* newBoard(int size) {
 }
 
 /* Destructor for an existing Board:
-	Frees space allocated for boardArray
+	Frees space allocated for board arrays
 	Frees space allocated for board
 */
 void destructBoard(Board* board) {
@@ -113,7 +113,7 @@ void placePiece(Board* board, int r, int c, char turn) {
    int r, int c - the location r,c on Board being analyzed
    int rChange, int cChange - the direction the line is being drawn
    int flip - whether or not pieces need to be flipped
-   char turn - the piece being placed on the board, and there for the piece being searched for
+   char turn - the piece being placed on the board, and therefore the piece being searched for
    char piece - the piece at location r,c being analyzed
 
    flipPieces:
@@ -164,7 +164,7 @@ void checkForMoves(Board* board, Player* player) {
 		*(board->visited + i) = 0;
 	}
 
-	// Board location (board->size-2)/2, (board->size-2)/2 will always be occupied
+	// Board location (board->size-2)/2, (board->size-2)/2 is set in constructor and will always be occupied
 	DFS(board, player, (board->size-2)/2, (board->size-2)/2);
 	return;
 }

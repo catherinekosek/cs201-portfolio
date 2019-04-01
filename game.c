@@ -13,8 +13,8 @@ Game* newGame() {
 
 	Game* game = malloc(sizeof(Game));
 	game->board = newBoard(size);	
-	game->player1 = newPlayer('b', human, size+2, 0);
-	game->player2 = newPlayer('w', type, size+2, 0);
+	game->player1 = newPlayer('b', human, size+2);
+	game->player2 = newPlayer('w', type, size+2);
 	game->turn = game->player1;
 	
 	return game;
@@ -124,7 +124,7 @@ int checkForWin(Game* game) {
 	Prompt again if invalid, placePiece and switch the turn if valid
 */
 void takeHumanTurn(Game* game) {
-	printf("\n\n%s's turn.\n", game->turn->name);
+	printf("\n\n%s's turn, placing piece '%c'.\n", game->turn->name, game->turn->piece);
 	printBoard(game->board);
 	Coordinate* coordinate = promptForCoordinate(game->board->size);
 	if (*(game->board->validMoves + coordinate->r * game->board->size + coordinate->c) == 0) {
@@ -146,7 +146,7 @@ void takeHumanTurn(Game* game) {
 	Switch the turn
 */
 void takeAITurn(Game* game) {
-	printf("\n\n%s's turn.\n", game->turn->name);
+	printf("\n\n%s's turn, placing piece '%c'.\n", game->turn->name, game->turn->piece);
 	printBoard(game->board);
 	printf("\nPlacing piece in row %d, column %d.\n", game->turn->nextMove->r, game->turn->nextMove->c);
 	placePiece(game->board, game->turn->nextMove->r, game->turn->nextMove->c, game->turn->piece);
