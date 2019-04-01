@@ -3,7 +3,7 @@
   Catherine Kosek
   
 ## Description
-  Othello, also known as Reversi, is a board game traditionally played on an 8x8 game board. Players take turns placing pieces of their color, black or white, on the board. A piece must be placed in a horizontal, vertical, or diagonal line from another piece of the same color, and there must be no empty spaces and one or more contiguous pieces of the opposite color between the existing piece and the newly placed piece. These sandwhiched pieces of the opposite color are flipped. The game ends when neither player can make any more moves, and the winner is the player with the most pieces of their color on the board.
+  Othello, also known as Reversi, is a board game traditionally played on an 8x8 game board. Players take turns placing pieces of their color, black or white, on the board. A piece must be placed in a horizontal, vertical, or diagonal line from another piece of the same color, and there must be no empty spaces and one or more contiguous pieces of the opposite color between the existing piece and the newly placed piece. These sandwiched pieces of the opposite color are flipped. The game ends when neither player can make any more moves, and the winner is the player with the most pieces of their color on the board.
 
 ## Video Tutorial
 https://www.youtube.com/watch?v=VBfDCJqKGWg
